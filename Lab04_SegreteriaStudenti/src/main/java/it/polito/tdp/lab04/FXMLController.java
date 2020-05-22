@@ -12,6 +12,7 @@ import java.util.ResourceBundle;
 
 import it.polito.tdp.lab04.model.Corso;
 import it.polito.tdp.lab04.model.Model;
+import it.polito.tdp.lab04.model.Studente;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -74,7 +75,26 @@ public class FXMLController {
 
     @FXML
     void doCercaNome(ActionEvent event) {
+    	txtNome.clear();
+    	txtCognome.clear();
+    	txtResult.clear();
     	
+    	try {
+    		int matricola=Integer.parseInt(txtMatricola.getText());
+    		Studente s=this.model.getIscrittoByMatricola(matricola);
+    		if(s==null) {
+    			txtResult.appendText("Studente inesistente");
+    			return;
+    		}else {
+    			txtNome.appendText(s.getNome());
+    			txtCognome.appendText(s.getCognome());
+    		}
+    		
+    	}catch (NumberFormatException e) {
+			txtResult.setText("Inserire una matricola nel formato corretto.");
+		} catch (RuntimeException e) {
+			txtResult.setText("ERRORE DI CONNESSIONE AL DATABASE!");
+		}
     }
 
     @FXML

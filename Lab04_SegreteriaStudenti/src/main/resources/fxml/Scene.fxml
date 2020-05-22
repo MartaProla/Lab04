@@ -58,12 +58,12 @@
                         <Insets right="20.0" top="20.0" />
                      </HBox.margin>
                   </Button>
-                  <TextField fx:id="txtNome" editable="false" prefHeight="25.0" prefWidth="139.0" promptText="Nome">
+                  <TextField fx:id="txtNome" editable="false" prefHeight="25.0" prefWidth="139.0" promptText="Cognome">
                      <HBox.margin>
                         <Insets right="10.0" top="20.0" />
                      </HBox.margin>
                   </TextField>
-                  <TextField fx:id="txtCognome" editable="false" promptText="Cognome">
+                  <TextField fx:id="txtCognome" editable="false" promptText="Nome">
                      <HBox.margin>
                         <Insets top="20.0" />
                      </HBox.margin>

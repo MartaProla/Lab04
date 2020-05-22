@@ -11,6 +11,9 @@ public class TestDB {
 		CorsoDAO cdao = new CorsoDAO();
 		cdao.getTuttiICorsi();
 		
+		StudenteDAO dao=new StudenteDAO();
+		dao.getIscrittoByMatricola(200482);
+		
 		
 	}
 
