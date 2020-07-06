@@ -26,6 +26,15 @@ public class Model {
 	public Studente getIscrittoByMatricola(Integer matricola) {
 		return dao.getIscrittoByMatricola(matricola);
 	}
+	public List<Studente> getIscrittoAlCorso(Corso c) {
+		return corsoDao.getStudentiIscrittiAlCorso(c);
+	}
+	public List<Corso>getCorsiByMatricola(Integer matricola){
+		return dao.getCorsoByMatricola(matricola);
+	}
+	public boolean getStudenteIscritto(Corso c, Integer matricola) {
+		return dao.studenteRisultaIscritto(c, matricola);
+	}
 	
 	
 

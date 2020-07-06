@@ -7,6 +7,7 @@ package it.polito.tdp.lab04;
 
 import java.net.URL;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -24,10 +25,11 @@ public class FXMLController {
 
 	private Model model;	
 	private List<Corso> corsi;
+	private List<Studente>studenti;
 		
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
-
+    
     @FXML // URL location of the FXML file that was given to the FXMLLoader
     private URL location;
 
@@ -60,15 +62,64 @@ public class FXMLController {
 
     @FXML // fx:id="btnReset"
     private Button btnReset; // Value injected by FXMLLoader
+    @FXML
+    private Button btnCercaCorrispondenza;
 
     @FXML
     void doCercaCorsi(ActionEvent event) {
+    	txtNome.clear();
+    	txtCognome.clear();
+    	txtResult.clear();
+    	
+    	try {
+    		Integer matricola= Integer.parseInt(txtMatricola.getText().trim());
+    		Studente s= this.model.getIscrittoByMatricola(matricola);
+    		if(s==null) {
+    			txtResult.appendText("Inserire la matricola, grazie");
+    			return;
+    		}else {
+    			this.corsi=new LinkedList<Corso>(this.model.getCorsiByMatricola(matricola));
+    			for(int i=0;i<corsi.size();i++) {
+    				Corso c= corsi.get(i);
+    				txtResult.appendText(c.getCodins()+" "+c.getCrediti()+" "+c.getNome()+" "+ c.getPd()+"\n");
+    			}
+    		}
+    		
+    	}catch (NumberFormatException e) {
+			txtResult.setText("Inserire una matricola nel formato corretto.");
+		} catch (RuntimeException e) {
+			txtResult.setText("ERRORE DI CONNESSIONE AL DATABASE!");
+		}
+    	
+    	
     	
     }
 
     @FXML
     void doCercaIscrittiCorso(ActionEvent event) {
-
+    	txtNome.clear();
+    	txtCognome.clear();
+    	txtResult.clear();
+    	
+    	try {
+    		Corso c=comboCorso.getValue();
+    		
+    		if(c==null) {
+    			txtResult.appendText("Nome Selezionato Inesistente");
+    			return;
+    		}else {
+    			studenti=new LinkedList<Studente>(this.model.getIscrittoAlCorso(c));
+    			for(int i=0;i<studenti.size();i++) {
+    				Studente s=studenti.get(i);
+    				txtResult.appendText(s.getMatricola()+" "+s.getNome()+" "+s.getCognome()+" "+s.getCDS()+"\n");
+    			}
+    		}
+    		
+    	}catch (NumberFormatException e) {
+			txtResult.setText("Inserire una matricola nel formato corretto.");
+		} catch (RuntimeException e) {
+			txtResult.setText("ERRORE DI CONNESSIONE AL DATABASE!");
+		}
     	
     	
     }
@@ -99,17 +150,42 @@ public class FXMLController {
 
     @FXML
     void doIscrivi(ActionEvent event) {
-
+    
 		
     }
 
     @FXML
     void doReset(ActionEvent event) {
-    	/*txtMatricola.clear();
+    	txtMatricola.clear();
     	txtNome.clear();
     	txtCognome.clear();
     	txtResult.clear();
-    	comboCorso.getSelectionModel().clearSelection();*/
+    	comboCorso.getSelectionModel().clearSelection();
+    }
+    @FXML
+    void doCerca(ActionEvent event) {
+    	txtNome.clear();
+    	txtCognome.clear();
+    	txtResult.clear();
+    	
+    	try {
+    		Corso c=comboCorso.getValue();
+    		int matricola=Integer.parseInt(txtMatricola.getText());
+    		Studente s=this.model.getIscrittoByMatricola(matricola);
+    		if(c==null && s== null) {
+    			txtResult.appendText("Nome Selezionato Inesistente");
+    			return;
+    		}else {
+    			txtResult.appendText("Studente già iscritto a questo corso");
+    			}
+    		
+    	}catch (NumberFormatException e) {
+			txtResult.setText("Inserire una matricola nel formato corretto.");
+		} catch (RuntimeException e) {
+			txtResult.setText("ERRORE DI CONNESSIONE AL DATABASE!");
+		}
+    	
+    	
     }
 
     private void setComboItems() {
@@ -134,7 +210,7 @@ public class FXMLController {
         assert btnIscrivi != null : "fx:id=\"btnIscrivi\" was not injected: check your FXML file 'Scene.fxml'.";
         assert txtResult != null : "fx:id=\"txtResult\" was not injected: check your FXML file 'Scene.fxml'.";
         assert btnReset != null : "fx:id=\"btnReset\" was not injected: check your FXML file 'Scene.fxml'.";
-    
+        assert btnCercaCorrispondenza != null : "fx:id=\"btnCercaCorrispondenza\" was not injected: check your FXML file 'Scene.fxml'.";
     }
     
     public void setModel(Model model) {
